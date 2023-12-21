@@ -1,0 +1,55 @@
+
+
+class Graph:
+    def __init__(self, vertices):
+        self.vertices = vertices
+        self.edges = []
+
+    def add_edge(self, u, v, weight):
+        self.edges.append((u, v, weight))
+
+    def bellman_ford(self, source):
+     
+        distances = {vertex: float('inf') for vertex in range(self.vertices)}
+        predecessors = {vertex: None for vertex in range(self.vertices)}
+        distances[source] = 0
+
+       
+        for _ in range(self.vertices - 1):
+            for u, v, weight in self.edges:
+                if distances[u] != float('inf') and distances[u] + weight < distances[v]:
+                    distances[v] = distances[u] + weight
+                    predecessors[v] = u
+
+      
+        for u, v, weight in self.edges:
+            if distances[u] != float('inf') and distances[u] + weight < distances[v]:
+                raise ValueError("Graph contains a negative cycle")
+
+        return distances, predecessors
+
+    def test_case(self, source_vertex):
+        distances, predecessors = self.bellman_ford(source_vertex)
+        print(f"Shortest distances from source vertex {source_vertex}:")
+        for vertex in range(self.vertices):
+            print(f"Vertex {vertex}: Distance = {distances[vertex]}, Predecessor = {predecessors[vertex]}")
+
+g = Graph(5)
+
+
+
+g.add_edge(0, 1, 2)
+g.add_edge(0, 0, 5)
+g.add_edge(1, 2, 0)
+g.add_edge(1, 3, 4)
+g.add_edge(2, 0, 1)
+g.add_edge(2, 1, 0)
+g.add_edge(1, 2, 0)
+g.add_edge(3, 4, 2)
+g.add_edge(4, 0, 1)
+g.add_edge(4, 0, 2)
+source_vertex = 3
+g.test_case(source_vertex)
+
+
+

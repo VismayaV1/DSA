@@ -1,0 +1,43 @@
+
+class Graph():
+
+	def __init__(self, vertex):
+		self.V = vertex
+		self.graph = [[0 for column in range(vertex)]
+					for row in range(vertex)]
+	def print(self, dis):
+		print("Vertex \t Distance from Source")
+		for node in range(self.V):
+			print(node, "\t\t", dis[node])
+	def minDis(self, dis, Set):
+		min = 1e7
+		for v in range(self.V):
+			if dis[v] < min and Set[v] == False:
+				min = dis[v]
+				index = v
+		return index
+	def dijkstra(self, sr):
+		dis = [1e7] * self.V
+		dis[sr] = 0
+		Set = [False] * self.V
+		for cout in range(self.V):
+			u = self.minDis(dis, Set)
+			Set[u] = True
+			for v in range(self.V):
+				if (self.graph[u][v] > 0 and
+				Set[v] == False and
+				dis[v] > dis[u] + self.graph[u][v]):
+					dis[v] = dis[u] + self.graph[u][v]
+		self.print(dis)
+g = Graph(6)
+g.graph = [
+    [0, 1, 4, 0, 0, 0],
+    [1, 0, 4, 2, 7, 0],
+    [4, 4, 0, 3, 5, 0],
+    [0, 2, 3, 0, 4, 6],
+    [0, 7, 5, 4, 0, 7],
+    [0, 0, 0, 6, 7, 0]
+]
+
+g.dijkstra(0)
+
